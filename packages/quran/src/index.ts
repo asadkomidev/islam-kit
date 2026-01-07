@@ -4,11 +4,18 @@
  * Quran utilities for querying surahs, ayahs, and reciters.
  * Zero dependencies, works in Node.js, Browser, React Native, and Edge runtimes.
  *
+ * Data is NOT bundled to keep package size small (~2KB).
+ * Fetch data from CDN or provide your own.
+ *
  * @example
  * ```typescript
- * // With bundled data
- * import { createQuranClient } from '@islam-kit/quran';
- * import { quranData, recitersData } from '@islam-kit/quran/data';
+ * import { createQuranClient, DATA_URLS } from '@islam-kit/quran';
+ *
+ * // Fetch data from CDN
+ * const [quranData, recitersData] = await Promise.all([
+ *   fetch(DATA_URLS.quran).then(r => r.json()),
+ *   fetch(DATA_URLS.reciters).then(r => r.json()),
+ * ]);
  *
  * const quran = createQuranClient({ quran: quranData, reciters: recitersData });
  *
@@ -23,6 +30,14 @@
  *
  * @packageDocumentation
  */
+
+/**
+ * CDN URLs for Quran and Reciters data
+ */
+export const DATA_URLS = {
+  quran: 'https://raw.githubusercontent.com/asadkomidev/islam-kit/main/packages/quran/data/quran.json',
+  reciters: 'https://raw.githubusercontent.com/asadkomidev/islam-kit/main/packages/quran/data/reciters.json',
+} as const;
 
 // Main class and factory
 export { QuranClient, createQuranClient } from './client';

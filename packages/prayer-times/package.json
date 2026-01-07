@@ -1,6 +1,6 @@
 {
   "name": "@islam-kit/prayer-times",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Calculate and format daily Islamic prayer times with multiple calculation methods",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -49,7 +49,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/asadkomidev/islam-kit",
+    "url": "git+https://github.com/asadkomidev/islam-kit.git",
     "directory": "packages/prayer-times"
   },
   "bugs": {

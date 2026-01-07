@@ -1,6 +1,6 @@
 {
   "name": "@islam-kit/quran",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Quran utilities for querying surahs, ayahs, and reciters",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -15,16 +15,6 @@
       "require": {
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
-      }
-    },
-    "./data": {
-      "import": {
-        "types": "./dist/data.d.ts",
-        "default": "./dist/data.js"
-      },
-      "require": {
-        "types": "./dist/data.d.cts",
-        "default": "./dist/data.cjs"
       }
     }
   },
@@ -56,7 +46,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/asadkomidev/islam-kit",
+    "url": "git+https://github.com/asadkomidev/islam-kit.git",
     "directory": "packages/quran"
   },
   "bugs": {

@@ -49,13 +49,16 @@ Each library package uses:
 - Exports both functional API (tree-shakeable) and class-based API
 
 ### Quran Package Data Strategy
-The quran package uses subpath exports for optional data bundling:
+Data is NOT bundled in npm package to keep it small (~7KB). Users fetch from CDN:
 ```typescript
-// Utilities only (~2KB)
-import { createQuranClient } from '@islam-kit/quran';
+import { createQuranClient, DATA_URLS } from '@islam-kit/quran';
 
-// With bundled data (~800KB)
-import { quranData, recitersData } from '@islam-kit/quran/data';
+const [quranData, recitersData] = await Promise.all([
+  fetch(DATA_URLS.quran).then(r => r.json()),
+  fetch(DATA_URLS.reciters).then(r => r.json()),
+]);
+
+const quran = createQuranClient({ quran: quranData, reciters: recitersData });
 ```
 
 ### Bundle Size Limits
