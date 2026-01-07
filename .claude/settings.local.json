@@ -26,7 +26,8 @@
       "Bash(vercel link:*)",
       "Bash(vercel ls:*)",
       "WebFetch(domain:islam-kit-docs-qicgh8k6o-asadkomidevs-projects.vercel.app)",
-      "Bash(vercel inspect:*)"
+      "Bash(vercel inspect:*)",
+      "Bash(vercel logs:*)"
     ]
   }
 }
