@@ -1,0 +1,54 @@
+name: Feature Request
+description: Suggest a new feature for Islam Kit
+labels: ['enhancement']
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: Which package is this feature for?
+      options:
+        - '@islam-kit/prayer-times'
+        - '@islam-kit/qibla'
+        - '@islam-kit/quran'
+        - 'New package'
+        - 'Documentation'
+        - 'Other'
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+      description: A clear and concise description of the feature you'd like.
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: Describe the problem you're trying to solve or the use case.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-api
+    attributes:
+      label: Proposed API
+      description: If you have an idea for the API, describe it here.
+      render: typescript
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any alternative solutions or features you've considered.
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to help implement this feature

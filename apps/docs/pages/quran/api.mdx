@@ -1,0 +1,422 @@
+# API Reference
+
+## Factory Function
+
+### createQuranClient
+
+Create a QuranClient instance with Quran and reciters data.
+
+```typescript
+function createQuranClient(config: QuranClientConfig): QuranClient;
+```
+
+**Parameters:**
+
+```typescript
+interface QuranClientConfig {
+  quran: QuranData;
+  reciters?: RecitersData;
+}
+```
+
+**Example:**
+
+```typescript
+import { createQuranClient } from '@islam-kit/quran';
+import { quranData, recitersData } from '@islam-kit/quran/data';
+
+const quran = createQuranClient({
+  quran: quranData,
+  reciters: recitersData,
+});
+```
+
+---
+
+## QuranClient Methods
+
+### Surah Methods
+
+#### getSurahs()
+
+Get all surahs metadata (without ayahs).
+
+```typescript
+getSurahs(): SurahMeta[]
+```
+
+**Returns:** Array of surah metadata (without ayahs for performance)
+
+```typescript
+const surahs = quran.getSurahs();
+console.log(surahs.length); // 114
+console.log(surahs[0].name); // "الفاتحة"
+```
+
+---
+
+#### getSurah(number)
+
+Get a specific surah by number (with ayahs).
+
+```typescript
+getSurah(number: number): Surah | undefined
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `number` | `number` | Surah number (1-114) |
+
+```typescript
+const surah = quran.getSurah(1);
+console.log(surah?.name);   // "الفاتحة"
+console.log(surah?.ayahs);  // Array of 7 ayahs
+```
+
+---
+
+#### getSurahByName(name)
+
+Get a surah by name (Arabic or transliterated).
+
+```typescript
+getSurahByName(name: string): Surah | undefined
+```
+
+```typescript
+const surah = quran.getSurahByName('الفاتحة');
+// or
+const surah = quran.getSurahByName('Al-Fatiha');
+// or
+const surah = quran.getSurahByName('al fatiha'); // Case insensitive
+```
+
+---
+
+#### getMeccanSurahs()
+
+Get all Meccan surahs.
+
+```typescript
+getMeccanSurahs(): SurahMeta[]
+```
+
+---
+
+#### getMedinanSurahs()
+
+Get all Medinan surahs.
+
+```typescript
+getMedinanSurahs(): SurahMeta[]
+```
+
+---
+
+#### getSurahFullText(surahNumber)
+
+Get the full concatenated text of a surah.
+
+```typescript
+getSurahFullText(surahNumber: number): string | undefined
+```
+
+---
+
+### Ayah Methods
+
+#### getAyah(surahNumber, ayahNumber)
+
+Get a specific ayah.
+
+```typescript
+getAyah(surahNumber: number, ayahNumber: number): Ayah | undefined
+```
+
+```typescript
+const ayah = quran.getAyah(2, 255); // Ayat al-Kursi
+console.log(ayah?.text);
+console.log(ayah?.translations.en);
+```
+
+---
+
+#### getAyahRange(surahNumber, start, end)
+
+Get a range of ayahs from a surah.
+
+```typescript
+getAyahRange(surahNumber: number, start: number, end: number): Ayah[]
+```
+
+```typescript
+const ayahs = quran.getAyahRange(2, 1, 5); // Al-Baqarah 1-5
+console.log(ayahs.length); // 5
+```
+
+---
+
+#### getTranslation(surahNumber, ayahNumber, lang)
+
+Get the English translation for an ayah.
+
+```typescript
+getTranslation(surahNumber: number, ayahNumber: number, lang?: 'en'): string | undefined
+```
+
+```typescript
+const translation = quran.getTranslation(1, 1);
+console.log(translation); // "In the name of Allah..."
+```
+
+---
+
+#### getRandomAyah()
+
+Get a random ayah from the Quran.
+
+```typescript
+getRandomAyah(): { surah: number; ayah: Ayah } | undefined
+```
+
+```typescript
+const random = quran.getRandomAyah();
+console.log(`${random?.surah}:${random?.ayah.number}`);
+console.log(random?.ayah.text);
+```
+
+---
+
+### Search Methods
+
+#### search(query, options?)
+
+Search Arabic text in the Quran.
+
+```typescript
+search(query: string, options?: SearchOptions): SearchResult[]
+```
+
+**Options:**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `limit` | `number` | `100` | Maximum results |
+| `caseSensitive` | `boolean` | `false` | Case sensitive search |
+
+```typescript
+const results = quran.search('الرحمن', { limit: 10 });
+results.forEach(r => {
+  console.log(`${r.surah}:${r.ayah} - ${r.text}`);
+});
+```
+
+---
+
+#### searchTranslation(query, options?)
+
+Search English translations.
+
+```typescript
+searchTranslation(query: string, options?: SearchOptions): SearchResult[]
+```
+
+```typescript
+const results = quran.searchTranslation('mercy', { limit: 10 });
+```
+
+---
+
+### Reciter Methods
+
+#### getReciters()
+
+Get all available reciters.
+
+```typescript
+getReciters(): Reciter[]
+```
+
+```typescript
+const reciters = quran.getReciters();
+reciters.forEach(r => {
+  console.log(`${r.name} (${r.nameArabic})`);
+});
+```
+
+---
+
+#### getReciter(id)
+
+Get a specific reciter by ID.
+
+```typescript
+getReciter(id: string): Reciter | undefined
+```
+
+```typescript
+const reciter = quran.getReciter('afs');
+console.log(reciter?.name); // "Mishary Alafasi"
+```
+
+---
+
+#### getReciterSurahs(reciterId)
+
+Get all surahs available for a reciter.
+
+```typescript
+getReciterSurahs(reciterId: string): SurahMeta[]
+```
+
+```typescript
+const surahs = quran.getReciterSurahs('afs');
+console.log(`${surahs.length} surahs available`);
+```
+
+---
+
+#### reciterHasSurah(reciterId, surahNumber)
+
+Check if a reciter has a specific surah.
+
+```typescript
+reciterHasSurah(reciterId: string, surahNumber: number): boolean
+```
+
+```typescript
+const has = quran.reciterHasSurah('afs', 114);
+console.log(has); // true
+```
+
+---
+
+#### getAudioUrl(reciterId, surahNumber)
+
+Get the audio URL for a surah from a reciter.
+
+```typescript
+getAudioUrl(reciterId: string, surahNumber: number): string | undefined
+```
+
+```typescript
+const url = quran.getAudioUrl('afs', 1);
+console.log(url); // "https://www.mp3quran.net/afs/001.mp3"
+```
+
+---
+
+### Utility Methods
+
+#### getTotalSurahs()
+
+Get the total number of surahs (114).
+
+```typescript
+getTotalSurahs(): number
+```
+
+---
+
+#### getTotalAyahs()
+
+Get the total number of ayahs (6236).
+
+```typescript
+getTotalAyahs(): number
+```
+
+---
+
+#### getMetadata()
+
+Get Quran metadata.
+
+```typescript
+getMetadata(): QuranMetadata
+```
+
+```typescript
+const meta = quran.getMetadata();
+console.log(meta.version);      // "1.0.0"
+console.log(meta.totalAyahs);   // 6236
+```
+
+---
+
+## Types
+
+### Surah
+
+```typescript
+interface Surah {
+  number: number;
+  name: string;
+  nameTransliterated: string;
+  nameTranslated: { en: string };
+  numberOfAyahs: number;
+  revelationType: 'meccan' | 'medinan';
+  fullText: string;
+  ayahs: Ayah[];
+}
+```
+
+### SurahMeta
+
+```typescript
+interface SurahMeta {
+  number: number;
+  name: string;
+  nameTransliterated: string;
+  nameTranslated: { en: string };
+  numberOfAyahs: number;
+  revelationType: 'meccan' | 'medinan';
+}
+```
+
+### Ayah
+
+```typescript
+interface Ayah {
+  number: number;
+  text: string;
+  translations: { en: string };
+}
+```
+
+### Reciter
+
+```typescript
+interface Reciter {
+  id: string;
+  name: string;
+  nameArabic: string;
+  audioFormat: string;
+  audioBaseUrl: string;
+  language: string;
+  urlName: string;
+  surahs: number[];
+}
+```
+
+### SearchResult
+
+```typescript
+interface SearchResult {
+  surah: number;
+  ayah: number;
+  text: string;
+  matchedText: string;
+}
+```
+
+### SearchOptions
+
+```typescript
+interface SearchOptions {
+  limit?: number;
+  caseSensitive?: boolean;
+}
+```

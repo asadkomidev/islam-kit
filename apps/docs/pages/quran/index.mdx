@@ -1,0 +1,181 @@
+# Quran
+
+Query Quran surahs, ayahs, and reciters with audio URLs.
+
+## Features
+
+- **Full Quran Data**: 114 surahs, 6236 ayahs with English translations
+- **Reciter Support**: 10 popular reciters with audio URLs
+- **Search**: Search Arabic text or English translations
+- **Flexible Data Loading**: Use bundled data or bring your own
+- **Zero Dependencies**: Pure TypeScript implementation
+
+## Installation
+
+```bash
+npm install @islam-kit/quran
+```
+
+## Quick Example
+
+```typescript
+import { createQuranClient } from '@islam-kit/quran';
+import { quranData, recitersData } from '@islam-kit/quran/data';
+
+const quran = createQuranClient({
+  quran: quranData,
+  reciters: recitersData,
+});
+
+// Get all surahs
+const surahs = quran.getSurahs();
+console.log(surahs.length); // 114
+
+// Get a specific surah
+const fatiha = quran.getSurah(1);
+console.log(fatiha.name);           // "الفاتحة"
+console.log(fatiha.nameTransliterated); // "Al-Fatiha"
+console.log(fatiha.ayahs.length);   // 7
+
+// Get an ayah
+const ayah = quran.getAyah(2, 255); // Ayat al-Kursi
+console.log(ayah.text);
+console.log(ayah.translations.en);
+
+// Get reciters
+const reciters = quran.getReciters();
+console.log(reciters.length); // 10
+
+// Get audio URL
+const audioUrl = quran.getAudioUrl('afs', 1);
+console.log(audioUrl); // "https://www.mp3quran.net/afs/001.mp3"
+```
+
+## Bundle Size Strategy
+
+The Quran data is ~800KB gzipped. To keep your bundle small, you have options:
+
+### Option 1: Use Bundled Data (Convenient)
+
+Import from `@islam-kit/quran/data`:
+
+```typescript
+import { createQuranClient } from '@islam-kit/quran';
+import { quranData, recitersData } from '@islam-kit/quran/data';
+
+const quran = createQuranClient({ quran: quranData, reciters: recitersData });
+```
+
+This includes the JSON data in your bundle.
+
+### Option 2: Bring Your Own Data (Smaller Bundle)
+
+Load data separately or from a CDN:
+
+```typescript
+import { createQuranClient } from '@islam-kit/quran';
+
+// Load from your own source
+const quranData = await fetch('/data/quran.json').then(r => r.json());
+const recitersData = await fetch('/data/reciters.json').then(r => r.json());
+
+const quran = createQuranClient({ quran: quranData, reciters: recitersData });
+```
+
+This keeps the main bundle tiny (~2KB).
+
+## Available Reciters
+
+| ID | Name | Arabic Name |
+|----|------|-------------|
+| `alzain` | Alzain Mohammad Ahmad | الزين محمد أحمد |
+| `basit` | Abdulbasit Abdulsamad | عبد الباسط عبد الصمد |
+| `afs` | Mishary Alafasi | مشاري العفاسي |
+| `s-gmd` | Saad Al-Ghamdi | سعد الغامدي |
+| `sds` | Abdulrahman Alsudaes | عبد الرحمن السديس |
+| `maher` | Maher Al Meaqli | ماهر المعيقلي |
+| `s-bud` | Salah Albudair | صلاح البدير |
+| `ajm` | Ahmad Al-Ajmy | أحمد العجمي |
+| `ayyoub2` | Mohammed Ayyub | محمد أيوب |
+| `bsfr` | Abdullah Basfer | عبد الله بصفر |
+
+## Working with Reciters
+
+```typescript
+// Get all reciters
+const reciters = quran.getReciters();
+
+// Get a specific reciter
+const mishary = quran.getReciter('afs');
+console.log(mishary.name);      // "Mishary Alafasi"
+console.log(mishary.nameArabic); // "مشاري العفاسي"
+
+// Get surahs available for a reciter
+const surahs = quran.getReciterSurahs('afs');
+console.log(surahs.length); // Number of surahs available
+
+// Check if reciter has a surah
+const hasSurah = quran.reciterHasSurah('afs', 114);
+console.log(hasSurah); // true or false
+
+// Get audio URL
+const url = quran.getAudioUrl('afs', 1);
+console.log(url); // Full URL to MP3 file
+```
+
+## Searching
+
+```typescript
+// Search Arabic text
+const arabicResults = quran.search('الرحمن', { limit: 10 });
+
+// Search English translations
+const englishResults = quran.searchTranslation('mercy', { limit: 10 });
+
+// Results include surah and ayah numbers
+arabicResults.forEach(result => {
+  console.log(`${result.surah}:${result.ayah} - ${result.text}`);
+});
+```
+
+## React Example
+
+```tsx
+import { useState, useEffect } from 'react';
+import { createQuranClient } from '@islam-kit/quran';
+import type { QuranClient, SurahMeta } from '@islam-kit/quran';
+
+function SurahList() {
+  const [quran, setQuran] = useState<QuranClient | null>(null);
+  const [surahs, setSurahs] = useState<SurahMeta[]>([]);
+
+  useEffect(() => {
+    // Dynamic import to avoid bundling data
+    Promise.all([
+      import('@islam-kit/quran/data').then(m => m.quranData),
+      import('@islam-kit/quran/data').then(m => m.recitersData),
+    ]).then(([quranData, recitersData]) => {
+      const client = createQuranClient({ quran: quranData, reciters: recitersData });
+      setQuran(client);
+      setSurahs(client.getSurahs());
+    });
+  }, []);
+
+  if (!quran) return <div>Loading...</div>;
+
+  return (
+    <ul>
+      {surahs.map(surah => (
+        <li key={surah.number}>
+          {surah.number}. {surah.nameTransliterated} ({surah.name})
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## Next Steps
+
+- [Data Format](/quran/data-format) - JSON structure documentation
+- [API Reference](/quran/api) - Full API documentation

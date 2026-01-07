@@ -1,0 +1,141 @@
+# Quick Start
+
+Get prayer times working in your application in under 2 minutes.
+
+## Basic Usage
+
+```typescript
+import { getPrayerTimes } from '@islam-kit/prayer-times';
+
+// Get today's prayer times for New York
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+});
+
+// Each time is a Date object
+console.log(times.fajr.toLocaleTimeString());   // "5:23:00 AM"
+console.log(times.dhuhr.toLocaleTimeString());  // "12:05:00 PM"
+console.log(times.maghrib.toLocaleTimeString()); // "6:45:00 PM"
+```
+
+## Choosing a Calculation Method
+
+Different regions use different calculation methods:
+
+```typescript
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',  // For North America
+});
+```
+
+Common methods:
+- `'ISNA'` - North America
+- `'MWL'` - Muslim World League (Europe, Far East)
+- `'MAKKAH'` - Saudi Arabia, Gulf region
+- `'EGYPT'` - Egypt, Africa
+
+See [Calculation Methods](/prayer-times/calculation-methods) for the full list.
+
+## Using the Class API
+
+For more control, use the `PrayerTimesCalculator` class:
+
+```typescript
+import { PrayerTimesCalculator } from '@islam-kit/prayer-times';
+
+const calculator = new PrayerTimesCalculator(
+  { latitude: 40.7128, longitude: -74.006 },
+  { method: 'ISNA' }
+);
+
+// Get times for any date
+const today = calculator.getTimes(new Date());
+const tomorrow = calculator.getTimes(new Date(Date.now() + 86400000));
+
+// Get next prayer
+const next = calculator.getNextPrayer(today);
+console.log(`Next prayer: ${next.name} at ${next.time.toLocaleTimeString()}`);
+
+// Get current prayer period
+const current = calculator.getCurrentPrayer(today);
+console.log(`Current period: ${current.name}`);
+```
+
+## Formatting Times
+
+Format prayer times for display:
+
+```typescript
+import { getPrayerTimes, formatPrayerTimes } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+});
+
+// Format in 12-hour format
+const formatted = formatPrayerTimes(times, { format: '12h' });
+console.log(formatted.fajr);    // "5:23 AM"
+console.log(formatted.dhuhr);   // "12:05 PM"
+
+// Format in 24-hour format
+const formatted24 = formatPrayerTimes(times, { format: '24h' });
+console.log(formatted24.fajr);  // "05:23"
+console.log(formatted24.dhuhr); // "12:05"
+```
+
+## With Manual Adjustments
+
+Fine-tune prayer times with manual adjustments:
+
+```typescript
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+  adjustments: {
+    fajr: 2,      // Add 2 minutes to Fajr
+    isha: -3,     // Subtract 3 minutes from Isha
+  },
+});
+```
+
+## React Example
+
+```tsx
+import { useState, useEffect } from 'react';
+import { getPrayerTimes, formatPrayerTimes } from '@islam-kit/prayer-times';
+
+function PrayerTimesWidget({ latitude, longitude }) {
+  const [times, setTimes] = useState(null);
+
+  useEffect(() => {
+    const prayerTimes = getPrayerTimes(new Date(), {
+      latitude,
+      longitude,
+      method: 'ISNA',
+    });
+    setTimes(formatPrayerTimes(prayerTimes, { format: '12h' }));
+  }, [latitude, longitude]);
+
+  if (!times) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <p>Fajr: {times.fajr}</p>
+      <p>Dhuhr: {times.dhuhr}</p>
+      <p>Asr: {times.asr}</p>
+      <p>Maghrib: {times.maghrib}</p>
+      <p>Isha: {times.isha}</p>
+    </div>
+  );
+}
+```
+
+## Next Steps
+
+- [Calculation Methods](/prayer-times/calculation-methods) - Understand different methods
+- [API Reference](/prayer-times/api) - Full API documentation

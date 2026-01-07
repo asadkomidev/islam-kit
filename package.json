@@ -1,0 +1,46 @@
+{
+  "name": "islam-kit",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "test:coverage": "turbo run test:coverage",
+    "format": "prettier --write \"**/*.{ts,tsx,md,mdx,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,mdx,json}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build --filter=./packages/* && changeset publish",
+    "size-limit": "size-limit"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.0",
+    "@size-limit/preset-small-lib": "^11.0.0",
+    "prettier": "^3.2.0",
+    "size-limit": "^11.0.0",
+    "turbo": "^2.3.0",
+    "typescript": "^5.6.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "size-limit": [
+    {
+      "path": "packages/qibla/dist/index.js",
+      "limit": "1 KB"
+    },
+    {
+      "path": "packages/prayer-times/dist/index.js",
+      "limit": "5 KB"
+    },
+    {
+      "path": "packages/quran/dist/index.js",
+      "limit": "2 KB"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+# Islam Kit
+
+**Muslim utilities for the JavaScript ecosystem**
+
+Islam Kit is a collection of zero-dependency packages for building Islamic applications. Works everywhere: Node.js, Browser, React, React Native, and Edge runtimes.
+
+## Packages
+
+### [@islam-kit/prayer-times](/prayer-times)
+
+Calculate accurate Islamic prayer times using 14 different calculation methods.
+
+```bash
+npm install @islam-kit/prayer-times
+```
+
+```typescript
+import { getPrayerTimes } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+});
+
+console.log(times.fajr);    // Date object
+console.log(times.dhuhr);   // Date object
+console.log(times.maghrib); // Date object
+```
+
+### [@islam-kit/qibla](/qibla)
+
+Calculate Qibla direction from any location on Earth.
+
+```bash
+npm install @islam-kit/qibla
+```
+
+```typescript
+import { calculateQibla } from '@islam-kit/qibla';
+
+const qibla = calculateQibla({ latitude: 40.7128, longitude: -74.006 });
+
+console.log(qibla.direction); // 58.48 (degrees from North)
+console.log(qibla.distance);  // 10306.32 (km to Kaaba)
+console.log(qibla.compass);   // "ENE"
+```
+
+### [@islam-kit/quran](/quran)
+
+Query Quran surahs, ayahs, and reciters with audio URLs.
+
+```bash
+npm install @islam-kit/quran
+```
+
+```typescript
+import { createQuranClient } from '@islam-kit/quran';
+import { quranData, recitersData } from '@islam-kit/quran/data';
+
+const quran = createQuranClient({ quran: quranData, reciters: recitersData });
+
+const surah = quran.getSurah(1);
+const reciters = quran.getReciters();
+const audioUrl = quran.getAudioUrl('afs', 1);
+```
+
+## Features
+
+- **Zero Dependencies**: Pure TypeScript/JavaScript implementations
+- **Universal Compatibility**: Works in Node.js, Browser, React, React Native, Edge runtimes
+- **Tree-Shakeable**: Import only what you need
+- **TypeScript First**: Full type definitions included
+- **Small Bundle Sizes**: Optimized for production
+
+## Quick Links
+
+- [Getting Started](/getting-started) - Installation and setup
+- [Prayer Times API](/prayer-times/api) - Full API reference
+- [Qibla API](/qibla/api) - Full API reference
+- [Quran API](/quran/api) - Full API reference
