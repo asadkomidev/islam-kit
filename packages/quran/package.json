@@ -56,13 +56,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/asadkomi/islam-kit",
+    "url": "https://github.com/asadkomidev/islam-kit",
     "directory": "packages/quran"
   },
   "bugs": {
-    "url": "https://github.com/asadkomi/islam-kit/issues"
+    "url": "https://github.com/asadkomidev/islam-kit/issues"
   },
-  "homepage": "https://github.com/asadkomi/islam-kit/tree/main/packages/quran#readme",
+  "homepage": "https://github.com/asadkomidev/islam-kit/tree/main/packages/quran#readme",
   "devDependencies": {
     "@islam-kit/eslint-config": "workspace:*",
     "@islam-kit/typescript-config": "workspace:*",

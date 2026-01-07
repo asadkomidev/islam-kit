@@ -45,13 +45,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/asadkomi/islam-kit",
+    "url": "https://github.com/asadkomidev/islam-kit",
     "directory": "packages/qibla"
   },
   "bugs": {
-    "url": "https://github.com/asadkomi/islam-kit/issues"
+    "url": "https://github.com/asadkomidev/islam-kit/issues"
   },
-  "homepage": "https://github.com/asadkomi/islam-kit/tree/main/packages/qibla#readme",
+  "homepage": "https://github.com/asadkomidev/islam-kit/tree/main/packages/qibla#readme",
   "devDependencies": {
     "@islam-kit/eslint-config": "workspace:*",
     "@islam-kit/typescript-config": "workspace:*",

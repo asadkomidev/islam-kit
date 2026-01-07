@@ -49,13 +49,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/asadkomi/islam-kit",
+    "url": "https://github.com/asadkomidev/islam-kit",
     "directory": "packages/prayer-times"
   },
   "bugs": {
-    "url": "https://github.com/asadkomi/islam-kit/issues"
+    "url": "https://github.com/asadkomidev/islam-kit/issues"
   },
-  "homepage": "https://github.com/asadkomi/islam-kit/tree/main/packages/prayer-times#readme",
+  "homepage": "https://github.com/asadkomidev/islam-kit/tree/main/packages/prayer-times#readme",
   "devDependencies": {
     "@islam-kit/eslint-config": "workspace:*",
     "@islam-kit/typescript-config": "workspace:*",

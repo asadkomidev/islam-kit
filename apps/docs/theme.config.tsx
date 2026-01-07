@@ -4,9 +4,9 @@ import type { DocsThemeConfig } from 'nextra-theme-docs';
 const config: DocsThemeConfig = {
   logo: <span style={{ fontWeight: 700 }}>Islam Kit</span>,
   project: {
-    link: 'https://github.com/asadkomi/islam-kit',
+    link: 'https://github.com/asadkomidev/islam-kit',
   },
-  docsRepositoryBase: 'https://github.com/asadkomi/islam-kit/tree/main/apps/docs',
+  docsRepositoryBase: 'https://github.com/asadkomidev/islam-kit/tree/main/apps/docs',
   footer: {
     text: 'Islam Kit - Muslim utilities for the JavaScript ecosystem',
   },
