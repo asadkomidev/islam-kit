@@ -1,0 +1,151 @@
+# Calculation Methods
+
+Prayer times are calculated using different methods depending on the region and Islamic authority. Each method uses different angles for Fajr and Isha calculations.
+
+## Available Methods
+
+| Method ID | Name | Fajr Angle | Isha |
+|-----------|------|------------|------|
+| `MWL` | Muslim World League | 18° | 17° |
+| `ISNA` | Islamic Society of North America | 15° | 15° |
+| `EGYPT` | Egyptian General Authority | 19.5° | 17.5° |
+| `MAKKAH` | Umm Al-Qura University, Makkah | 18.5° | 90 min after Maghrib |
+| `KARACHI` | University of Islamic Sciences, Karachi | 18° | 18° |
+| `TEHRAN` | Institute of Geophysics, Tehran | 17.7° | 14° |
+| `JAFARI` | Shia Ithna-Ashari (Jafari) | 16° | 14° |
+| `GULF` | Gulf Region | 19.5° | 90 min after Maghrib |
+| `KUWAIT` | Kuwait | 18° | 17.5° |
+| `QATAR` | Qatar | 18° | 90 min after Maghrib |
+| `SINGAPORE` | Singapore | 20° | 18° |
+| `TURKEY` | Turkey (Diyanet) | 18° | 17° |
+| `DUBAI` | Dubai, UAE | 18.2° | 18.2° |
+| `MOONSIGHTING` | Moonsighting Committee | 18° | 18° |
+
+## Choosing a Method
+
+### By Region
+
+| Region | Recommended Method |
+|--------|-------------------|
+| North America | `ISNA` |
+| Europe | `MWL` |
+| Saudi Arabia | `MAKKAH` |
+| Egypt, Africa | `EGYPT` |
+| Gulf countries | `GULF` |
+| Turkey | `TURKEY` |
+| Pakistan | `KARACHI` |
+| Iran | `TEHRAN` or `JAFARI` |
+| Singapore, Malaysia | `SINGAPORE` |
+
+### Usage
+
+```typescript
+import { getPrayerTimes, CALCULATION_METHODS } from '@islam-kit/prayer-times';
+
+// Use a specific method
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+});
+
+// List all available methods
+console.log(Object.keys(CALCULATION_METHODS));
+// ['MWL', 'ISNA', 'EGYPT', 'MAKKAH', ...]
+
+// Access method details
+const isna = CALCULATION_METHODS.ISNA;
+console.log(isna.name);        // "Islamic Society of North America"
+console.log(isna.params.fajr); // 15 (degrees)
+```
+
+## Fajr and Isha Angles
+
+Prayer times for Fajr and Isha are calculated based on the sun's angle below the horizon:
+
+- **Fajr**: Begins when the sun is a certain number of degrees below the horizon (before sunrise)
+- **Isha**: Begins when the sun is a certain number of degrees below the horizon (after sunset)
+
+Higher angles result in earlier Fajr times and later Isha times.
+
+### Example: Angle Differences
+
+For a location at latitude 40°N on January 15:
+
+| Method | Fajr Angle | Approximate Fajr Time |
+|--------|------------|----------------------|
+| ISNA | 15° | ~5:45 AM |
+| MWL | 18° | ~5:30 AM |
+| EGYPT | 19.5° | ~5:20 AM |
+
+## Fixed Isha Time
+
+Some methods (MAKKAH, GULF, QATAR) use a fixed offset from Maghrib instead of an angle:
+
+```typescript
+// Umm Al-Qura method: Isha is 90 minutes after Maghrib
+const times = getPrayerTimes(new Date(), {
+  latitude: 21.4225,
+  longitude: 39.8262,
+  method: 'MAKKAH',
+});
+
+// Isha will be exactly 90 minutes after Maghrib
+```
+
+## Asr Calculation Methods
+
+In addition to Fajr/Isha calculation methods, there are two schools for calculating Asr time:
+
+| Method | Description | Shadow Length |
+|--------|-------------|---------------|
+| `STANDARD` (Shafi'i, Maliki, Hanbali) | When shadow equals object height plus noon shadow | 1x |
+| `HANAFI` | When shadow equals twice object height plus noon shadow | 2x |
+
+```typescript
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+  asrMethod: 'HANAFI', // Later Asr time
+});
+```
+
+## High Latitude Adjustments
+
+At high latitudes (above ~48°), Fajr and Isha may not occur naturally during certain seasons. Several adjustment methods are available:
+
+| Method | Description |
+|--------|-------------|
+| `NONE` | No adjustment (may result in invalid times) |
+| `MIDNIGHT` | Use middle of night |
+| `ONE_SEVENTH` | Use 1/7th of night from Maghrib for Isha, from midnight for Fajr |
+| `ANGLE_BASED` | Use angle-based calculation with adjusted angles |
+
+```typescript
+const times = getPrayerTimes(new Date(), {
+  latitude: 64.1466, // Reykjavik, Iceland
+  longitude: -21.9426,
+  method: 'MWL',
+  highLatitudeMethod: 'ANGLE_BASED',
+});
+```
+
+## Custom Parameters
+
+For advanced use cases, you can specify custom parameters:
+
+```typescript
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+  adjustments: {
+    fajr: 2,    // +2 minutes
+    dhuhr: 1,   // +1 minute
+    asr: 0,
+    maghrib: 3, // +3 minutes
+    isha: -2,   // -2 minutes
+  },
+});
+```

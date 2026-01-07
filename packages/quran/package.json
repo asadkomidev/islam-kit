@@ -1,0 +1,75 @@
+{
+  "name": "@islam-kit/quran",
+  "version": "0.0.1",
+  "description": "Quran utilities for querying surahs, ayahs, and reciters",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./data": {
+      "import": {
+        "types": "./dist/data.d.ts",
+        "default": "./dist/data.js"
+      },
+      "require": {
+        "types": "./dist/data.d.cts",
+        "default": "./dist/data.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist coverage"
+  },
+  "keywords": [
+    "islam",
+    "quran",
+    "koran",
+    "surah",
+    "ayah",
+    "verse",
+    "reciter",
+    "tilawah",
+    "muslim"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asadkomi/islam-kit",
+    "directory": "packages/quran"
+  },
+  "bugs": {
+    "url": "https://github.com/asadkomi/islam-kit/issues"
+  },
+  "homepage": "https://github.com/asadkomi/islam-kit/tree/main/packages/quran#readme",
+  "devDependencies": {
+    "@islam-kit/eslint-config": "workspace:*",
+    "@islam-kit/typescript-config": "workspace:*",
+    "@vitest/coverage-v8": "^2.1.0",
+    "eslint": "^8.57.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

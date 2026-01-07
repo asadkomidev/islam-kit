@@ -1,0 +1,64 @@
+{
+  "name": "@islam-kit/qibla",
+  "version": "0.0.1",
+  "description": "Calculate Qibla direction and distance to Kaaba from GPS coordinates",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist coverage"
+  },
+  "keywords": [
+    "islam",
+    "qibla",
+    "mecca",
+    "kaaba",
+    "compass",
+    "direction",
+    "muslim",
+    "prayer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asadkomi/islam-kit",
+    "directory": "packages/qibla"
+  },
+  "bugs": {
+    "url": "https://github.com/asadkomi/islam-kit/issues"
+  },
+  "homepage": "https://github.com/asadkomi/islam-kit/tree/main/packages/qibla#readme",
+  "devDependencies": {
+    "@islam-kit/eslint-config": "workspace:*",
+    "@islam-kit/typescript-config": "workspace:*",
+    "@vitest/coverage-v8": "^2.1.0",
+    "eslint": "^8.57.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
