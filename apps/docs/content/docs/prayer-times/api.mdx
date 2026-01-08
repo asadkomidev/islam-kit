@@ -1,0 +1,398 @@
+---
+title: API Reference
+description: Complete API reference for @islam-kit/prayer-times package.
+---
+
+# API Reference
+
+## Functional API
+
+### getPrayerTimes
+
+Calculate prayer times for a specific date and location.
+
+```typescript
+function getPrayerTimes(
+  date: Date,
+  options: PrayerTimesOptions
+): PrayerTimes;
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `date` | `Date` | The date to calculate times for |
+| `options` | `PrayerTimesOptions` | Configuration options |
+
+**Options:**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `latitude` | `number` | required | Latitude of location (-90 to 90) |
+| `longitude` | `number` | required | Longitude of location (-180 to 180) |
+| `method` | `CalculationMethodId` | `'MWL'` | Calculation method |
+| `asrMethod` | `'STANDARD' \| 'HANAFI'` | `'STANDARD'` | Asr calculation method |
+| `adjustments` | `PrayerAdjustments` | `{}` | Manual adjustments in minutes |
+| `highLatitudeMethod` | `HighLatitudeMethod` | `'ANGLE_BASED'` | High latitude adjustment |
+
+**Returns:** `PrayerTimes`
+
+```typescript
+interface PrayerTimes {
+  date: Date;     // The date these times are for
+  fajr: Date;
+  sunrise: Date;
+  dhuhr: Date;
+  asr: Date;
+  maghrib: Date;
+  isha: Date;
+}
+```
+
+**Example:**
+
+```typescript
+import { getPrayerTimes } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+});
+```
+
+---
+
+### getNextPrayer
+
+Get the next upcoming prayer from a set of prayer times.
+
+```typescript
+function getNextPrayer(
+  times: PrayerTimes,
+  now?: Date
+): NextPrayer;
+
+interface NextPrayer {
+  name: PrayerName;
+  time: Date;
+}
+```
+
+**Parameters:**
+
+| Name | Type | Description |
+|------|------|-------------|
+| `times` | `PrayerTimes` | Prayer times object |
+| `now` | `Date` | Current time (defaults to `new Date()`) |
+
+**Example:**
+
+```typescript
+import { getPrayerTimes, getNextPrayer } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), { latitude: 40.7, longitude: -74 });
+const next = getNextPrayer(times);
+
+console.log(next.name); // 'dhuhr'
+console.log(next.time); // Date object
+```
+
+---
+
+### formatPrayerTimes
+
+Format prayer times for display.
+
+```typescript
+function formatPrayerTimes(
+  times: PrayerTimes,
+  options?: FormatOptions
+): FormattedPrayerTimes;
+```
+
+**Options:**
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `format` | `'12h' \| '24h'` | `'12h'` | Time format |
+| `locale` | `string` | `'en-US'` | Locale for formatting |
+
+**Example:**
+
+```typescript
+import { getPrayerTimes, formatPrayerTimes } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), { latitude: 40.7, longitude: -74 });
+const formatted = formatPrayerTimes(times, { format: '12h' });
+
+console.log(formatted.fajr); // '5:23 AM'
+```
+
+---
+
+### getCurrentPrayer
+
+Get the current prayer period based on the time.
+
+```typescript
+function getCurrentPrayer(
+  times: PrayerTimes,
+  now?: Date
+): CurrentPrayer;
+
+interface CurrentPrayer {
+  name: PrayerName;
+  startTime: Date;
+}
+```
+
+**Example:**
+
+```typescript
+import { getPrayerTimes, getCurrentPrayer } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), { latitude: 40.7, longitude: -74 });
+const current = getCurrentPrayer(times);
+
+console.log(current.name);      // 'dhuhr'
+console.log(current.startTime); // Date when current prayer started
+```
+
+---
+
+### getPrayerTimesForRange
+
+Calculate prayer times for a range of dates.
+
+```typescript
+function getPrayerTimesForRange(
+  startDate: Date,
+  endDate: Date,
+  options: PrayerTimesOptions
+): PrayerTimes[];
+```
+
+**Example:**
+
+```typescript
+import { getPrayerTimesForRange } from '@islam-kit/prayer-times';
+
+const startDate = new Date();
+const endDate = new Date(Date.now() + 7 * 86400000); // 7 days
+
+const weekTimes = getPrayerTimesForRange(startDate, endDate, {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+});
+
+weekTimes.forEach(day => {
+  console.log(day.date.toDateString(), day.fajr.toLocaleTimeString());
+});
+```
+
+---
+
+### formatTime
+
+Format a single Date object to a time string.
+
+```typescript
+function formatTime(time: Date, options?: TimeFormatOptions): string;
+```
+
+**Example:**
+
+```typescript
+import { getPrayerTimes, formatTime } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), { latitude: 40.7, longitude: -74 });
+
+console.log(formatTime(times.fajr));                    // '5:23 AM'
+console.log(formatTime(times.fajr, { format: '24h' })); // '05:23'
+```
+
+---
+
+### getTimeRemaining
+
+Get the time remaining until a specific prayer.
+
+```typescript
+function getTimeRemaining(targetTime: Date, now?: Date): {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  totalSeconds: number;
+};
+```
+
+**Example:**
+
+```typescript
+import { getPrayerTimes, getTimeRemaining } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), { latitude: 40.7, longitude: -74 });
+const remaining = getTimeRemaining(times.maghrib);
+
+console.log(`${remaining.hours}h ${remaining.minutes}m until Maghrib`);
+```
+
+---
+
+### formatTimeRemaining
+
+Format the time remaining as a human-readable string.
+
+```typescript
+function formatTimeRemaining(targetTime: Date, now?: Date): string;
+```
+
+**Example:**
+
+```typescript
+import { getPrayerTimes, formatTimeRemaining } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), { latitude: 40.7, longitude: -74 });
+console.log(formatTimeRemaining(times.maghrib)); // '2h 35m'
+```
+
+---
+
+## Class API
+
+### PrayerTimesCalculator
+
+A class for calculating prayer times with stateful configuration.
+
+```typescript
+class PrayerTimesCalculator {
+  constructor(
+    coordinates: Coordinates,
+    options?: CalculatorOptions
+  );
+
+  getTimes(date: Date): PrayerTimes;
+  getTimesForRange(startDate: Date, endDate: Date): PrayerTimes[];
+  getNextPrayer(times: PrayerTimes, now?: Date): NextPrayer;
+  getCurrentPrayer(times: PrayerTimes, now?: Date): CurrentPrayer;
+  setMethod(method: CalculationMethodId): void;
+  setAsrMethod(method: AsrMethod): void;
+}
+```
+
+**Example:**
+
+```typescript
+import { PrayerTimesCalculator } from '@islam-kit/prayer-times';
+
+const calculator = new PrayerTimesCalculator(
+  { latitude: 40.7128, longitude: -74.006 },
+  { method: 'ISNA' }
+);
+
+// Get times for today
+const today = calculator.getTimes(new Date());
+
+// Get times for a week
+const startDate = new Date();
+const endDate = new Date(Date.now() + 7 * 86400000);
+const weekTimes = calculator.getTimesForRange(startDate, endDate);
+
+// Change settings
+calculator.setMethod('MWL');
+calculator.setAsrMethod('HANAFI');
+```
+
+---
+
+## Types
+
+### PrayerName
+
+```typescript
+type PrayerName = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
+```
+
+### CalculationMethodId
+
+```typescript
+type CalculationMethodId =
+  | 'MWL'
+  | 'ISNA'
+  | 'EGYPT'
+  | 'MAKKAH'
+  | 'KARACHI'
+  | 'TEHRAN'
+  | 'JAFARI'
+  | 'GULF'
+  | 'KUWAIT'
+  | 'QATAR'
+  | 'SINGAPORE'
+  | 'TURKEY'
+  | 'DUBAI'
+  | 'MOONSIGHTING';
+```
+
+### Coordinates
+
+```typescript
+interface Coordinates {
+  latitude: number;   // -90 to 90
+  longitude: number;  // -180 to 180
+  elevation?: number; // Elevation in meters (optional)
+}
+```
+
+### PrayerAdjustments
+
+```typescript
+interface PrayerAdjustments {
+  fajr?: number;
+  sunrise?: number;
+  dhuhr?: number;
+  asr?: number;
+  maghrib?: number;
+  isha?: number;
+}
+```
+
+### HighLatitudeMethod
+
+```typescript
+type HighLatitudeMethod = 'NONE' | 'ANGLE_BASED' | 'MIDDLE_OF_NIGHT' | 'ONE_SEVENTH';
+```
+
+### AsrMethod
+
+```typescript
+type AsrMethod = 'STANDARD' | 'HANAFI';
+```
+
+### TimeFormatOptions
+
+```typescript
+interface TimeFormatOptions {
+  format?: '12h' | '24h';
+  locale?: string;
+  includeSeconds?: boolean;
+}
+```
+
+---
+
+## Constants
+
+### CALCULATION_METHODS
+
+Object containing all calculation method configurations:
+
+```typescript
+import { CALCULATION_METHODS } from '@islam-kit/prayer-times';
+
+const isna = CALCULATION_METHODS.ISNA;
+console.log(isna.name);   // "Islamic Society of North America"
+console.log(isna.params); // { fajr: 15, isha: 15 }
+```

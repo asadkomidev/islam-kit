@@ -1,0 +1,76 @@
+---
+title: Qibla Direction
+description: Calculate the direction to the Kaaba from any location on Earth.
+---
+
+# Qibla Direction
+
+Calculate the direction to the Kaaba from any location on Earth.
+
+## Installation
+
+<InstallTabs packageName="@islam-kit/qibla" />
+
+## Quick Example
+
+```typescript
+import { calculateQibla } from '@islam-kit/qibla';
+
+const qibla = calculateQibla({
+  latitude: 40.7128,
+  longitude: -74.006,
+});
+
+console.log(qibla.direction); // 58.48 (degrees from North)
+console.log(qibla.distance);  // 10306.32 (km)
+console.log(qibla.compass);   // "ENE"
+```
+
+## Features
+
+- **Accurate Calculation** — Great-circle bearing formula
+- **Distance** — Distance to Kaaba in kilometers
+- **Compass Points** — 16-point compass (N, NNE, NE, etc.)
+- **Tiny Bundle** — ~1KB gzipped
+
+## Understanding Direction
+
+| Degrees | Direction |
+|---------|-----------|
+| 0° / 360° | North |
+| 90° | East |
+| 180° | South |
+| 270° | West |
+
+## Example Directions
+
+| Location | Direction | Compass |
+|----------|-----------|---------|
+| New York | ~58° | ENE |
+| London | ~119° | ESE |
+| Tokyo | ~293° | WNW |
+| Sydney | ~278° | W |
+
+## Individual Functions
+
+```typescript
+import {
+  getQiblaDirection,
+  getDistanceToKaaba,
+  getQiblaCompass,
+} from '@islam-kit/qibla';
+
+const coords = { latitude: 40.7128, longitude: -74.006 };
+
+const direction = getQiblaDirection(coords); // 58.48
+const distance = getDistanceToKaaba(coords); // 10306.32
+const compass = getQiblaCompass(coords);     // "ENE"
+```
+
+<Callout type="tip">
+Combine with device compass to create a real-time Qibla finder.
+</Callout>
+
+## Next Steps
+
+- [API Reference](/docs/qibla/api) — Full documentation

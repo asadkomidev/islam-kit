@@ -1,0 +1,83 @@
+---
+title: Getting Started
+description: Get up and running with Islam Kit in minutes.
+---
+
+## Installation
+
+Install the packages you need:
+
+### Prayer Times
+
+<InstallTabs packageName="@islam-kit/prayer-times" />
+
+### Qibla Direction
+
+<InstallTabs packageName="@islam-kit/qibla" />
+
+### Quran
+
+<InstallTabs packageName="@islam-kit/quran" />
+
+<Callout type="tip" title="Install all">
+Install all packages: `npm install @islam-kit/prayer-times @islam-kit/qibla @islam-kit/quran`
+</Callout>
+
+## Platform Support
+
+| Platform | Support |
+|----------|---------|
+| Node.js | ESM & CommonJS |
+| Browser | Via bundlers or CDN |
+| React / React Native | Direct import |
+| Next.js | Server & Client |
+| Edge Runtimes | Compatible |
+
+## TypeScript
+
+All packages include TypeScript definitions:
+
+```typescript
+import type { PrayerTimes } from '@islam-kit/prayer-times';
+import type { QiblaResult } from '@islam-kit/qibla';
+import type { Surah } from '@islam-kit/quran';
+```
+
+## Bundle Sizes
+
+| Package | Size |
+|---------|------|
+| @islam-kit/qibla | ~1 KB |
+| @islam-kit/prayer-times | ~5 KB |
+| @islam-kit/quran | ~2 KB |
+
+<Callout type="info">
+Quran data (~800KB) is loaded separately from CDN or bundled optionally.
+</Callout>
+
+## Example
+
+```typescript
+import { getPrayerTimes } from '@islam-kit/prayer-times';
+import { calculateQibla } from '@islam-kit/qibla';
+
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+});
+
+const qibla = calculateQibla({
+  latitude: 40.7128,
+  longitude: -74.006,
+});
+
+console.log('Fajr:', times.fajr);
+console.log('Qibla:', qibla.direction + '°');
+```
+
+## Next Steps
+
+- [Prayer Times](/docs/prayer-times) — Calculate prayer times
+- [Qibla](/docs/qibla) — Find Qibla direction
+- [Quran](/docs/quran) — Access Quran data

@@ -39,3 +39,9 @@ pnpm-debug.log*
 # Misc
 *.tgz
 .vercel
+
+# Claude Code
+.claude/settings.local.json
+
+# Playwright screenshots
+.playwright-mcp/

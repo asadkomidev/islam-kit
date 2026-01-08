@@ -1,0 +1,98 @@
+---
+title: Quran
+description: Query Quran surahs, ayahs, and reciters with audio URLs.
+---
+
+# Quran
+
+Query Quran surahs, ayahs, and reciters with audio URLs.
+
+## Installation
+
+<InstallTabs packageName="@islam-kit/quran" />
+
+## Quick Example
+
+```typescript
+import { createQuranClient, DATA_URLS } from '@islam-kit/quran';
+
+// Load data from CDN
+const [quranData, recitersData] = await Promise.all([
+  fetch(DATA_URLS.quran).then(r => r.json()),
+  fetch(DATA_URLS.reciters).then(r => r.json()),
+]);
+
+const quran = createQuranClient({
+  quran: quranData,
+  reciters: recitersData,
+});
+
+// Get surah
+const fatiha = quran.getSurah(1);
+console.log(fatiha.name); // "الفاتحة"
+
+// Get ayah
+const ayah = quran.getAyah(2, 255);
+console.log(ayah.text);
+
+// Get audio URL
+const url = quran.getAudioUrl('afs', 1);
+```
+
+## Features
+
+- **Full Quran Data** — 114 surahs, 6236 ayahs
+- **Reciter Support** — 50+ reciters with audio
+- **Search** — Arabic text and translations
+- **Flexible Loading** — Bundle or CDN
+
+<Callout type="info" title="Bundle Size">
+Utilities are ~2KB. Data (~800KB) loads separately.
+</Callout>
+
+## Loading Data
+
+Data is loaded from CDN to keep the package small (~2KB utilities only):
+
+```typescript
+import { createQuranClient, DATA_URLS } from '@islam-kit/quran';
+
+const [quranData, recitersData] = await Promise.all([
+  fetch(DATA_URLS.quran).then(r => r.json()),
+  fetch(DATA_URLS.reciters).then(r => r.json()),
+]);
+
+const quran = createQuranClient({
+  quran: quranData,
+  reciters: recitersData,
+});
+```
+
+<Callout type="info" title="CDN Data">
+Data files (~800KB total) are hosted on jsDelivr CDN for fast global delivery.
+</Callout>
+
+## Reciters
+
+| ID | Name |
+|----|------|
+| `afs` | Mishary Alafasi |
+| `basit` | Abdulbasit Abdulsamad |
+| `sds` | Abdulrahman Alsudaes |
+| `maher` | Maher Al Meaqli |
+| `s-gmd` | Saad Al-Ghamdi |
+
+## Searching
+
+```typescript
+// Arabic text
+const results = quran.search('الرحمن', { limit: 10 });
+
+// English translation
+const english = quran.searchTranslation('mercy', { limit: 10 });
+```
+
+## Next Steps
+
+- [Data Format](/docs/quran/data-format) — JSON structure
+- [API Reference](/docs/quran/api) — Full documentation

@@ -1,0 +1,59 @@
+---
+title: Prayer Times
+description: Calculate accurate Islamic prayer times for any location on Earth.
+---
+
+# Prayer Times
+
+Calculate accurate Islamic prayer times for any location on Earth.
+
+## Installation
+
+<InstallTabs packageName="@islam-kit/prayer-times" />
+
+## Quick Example
+
+```typescript
+import { getPrayerTimes } from '@islam-kit/prayer-times';
+
+const times = getPrayerTimes(new Date(), {
+  latitude: 40.7128,
+  longitude: -74.006,
+  method: 'ISNA',
+});
+
+console.log('Fajr:', times.fajr);
+console.log('Sunrise:', times.sunrise);
+console.log('Dhuhr:', times.dhuhr);
+console.log('Asr:', times.asr);
+console.log('Maghrib:', times.maghrib);
+console.log('Isha:', times.isha);
+```
+
+## Features
+
+- **14 Calculation Methods** — ISNA, MWL, MAKKAH, Egyptian, and more
+- **Asr Methods** — Standard (Shafi'i) and Hanafi supported
+- **High Latitude Support** — Multiple adjustment methods
+- **Two API Styles** — Functional and class-based
+
+## Prayers Calculated
+
+| Prayer | Description |
+|--------|-------------|
+| Fajr | Dawn prayer (begins at true dawn) |
+| Sunrise | End of Fajr time (not a prayer) |
+| Dhuhr | Noon prayer (after sun passes zenith) |
+| Asr | Afternoon prayer |
+| Maghrib | Post-sunset prayer |
+| Isha | Night prayer |
+
+<Callout type="info">
+All times are returned as JavaScript `Date` objects.
+</Callout>
+
+## Next Steps
+
+- [Quick Start](/docs/prayer-times/quick-start) — Get started
+- [Calculation Methods](/docs/prayer-times/calculation-methods) — Learn about methods
+- [API Reference](/docs/prayer-times/api) — Full documentation
