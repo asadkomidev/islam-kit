@@ -474,6 +474,10 @@ article h6:hover a img {
 .code-preview-content code {
   font-size: 0.875rem;
   line-height: 1.7;
+  color: #e5e7eb;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 /* ===== CTA Section ===== */
